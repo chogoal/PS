@@ -6,20 +6,8 @@ import java.util.*;
 public class BOJ_G4_13913 {
 
     static int N, K;
-    static boolean[] visited = new boolean[100001];
-    static Queue<Pos> queue = new ArrayDeque<Pos>();
-
-    static class Pos {
-        int x;
-        int time;
-        String history;
-
-        public Pos(int x, int time, String history) {
-            this.x = x;
-            this.time = time;
-            this.history = history;
-        }
-    }
+    static int[] time = new int[100001];
+    static int[] parent = new int[100001];
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -36,45 +24,59 @@ public class BOJ_G4_13913 {
             }
             System.out.println(sb.toString());
         } else {
-            Pos answer = bfs();
+            bfs();
 
-            sb.append(answer.time).append("\n");
-            sb.append(answer.history);
+            Stack<Integer> stack = new Stack<>();
+            stack.push(K);
+            int prev = K;
+
+            while (prev != N) {
+                stack.push(parent[prev]);
+                prev = parent[prev];
+            }
+
+            sb.append(time[K] - 1).append("\n");
+            while (!stack.empty()) {
+                sb.append(stack.pop() + " ");
+            }
             System.out.println(sb.toString());
         }
     }
 
-    private static Pos bfs() {
+    private static void bfs() {
 
-        queue.offer(new Pos(N, 0, N + " "));
-        visited[N] = true;
+        Queue<Integer> queue = new ArrayDeque<>();
+        queue.offer(N);
+        time[N] = 1;
 
         while (!queue.isEmpty()) {
-            Pos top = queue.poll();
 
-            if (top.x == K) {
-                return top;
+            int top = queue.poll();
+
+            if (top == K) {
+                return;
             }
 
             // 전진
-            if (top.x + 1 <= 100000 && !visited[top.x + 1]) {
-                queue.offer(new Pos(top.x + 1, top.time + 1, top.history + (top.x + 1) + " "));
-                visited[top.x + 1] = true;
+            if (top + 1 <= 100000 && time[top + 1] == 0) {
+                queue.offer(top + 1);
+                time[top + 1] = time[top] + 1;
+                parent[top + 1] = top;
             }
 
             // 후진
-            if (top.x - 1 >= 0 && !visited[top.x - 1]) {
-                queue.offer(new Pos(top.x - 1, top.time + 1, top.history + (top.x - 1) + " "));
-                visited[top.x - 1] = true;
+            if (top - 1 >= 0 && time[top - 1] == 0) {
+                queue.offer(top - 1);
+                time[top - 1] = time[top] + 1;
+                parent[top - 1] = top;
             }
 
             // 순간이동
-            if (top.x * 2 <= 100000 && !visited[top.x * 2]) {
-                queue.offer(new Pos(top.x * 2, top.time + 1, top.history + (top.x * 2) + " "));
-                visited[top.x * 2] = true;
+            if (top * 2 <= 100000 && time[top * 2] == 0) {
+                queue.offer(top * 2);
+                time[top * 2] = time[top] + 1;
+                parent[top * 2] = top;
             }
         }
-
-        return null;
     }
 }
