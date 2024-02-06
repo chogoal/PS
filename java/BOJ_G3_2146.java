@@ -43,7 +43,7 @@ public class BOJ_G3_2146 {
             }
         }
 
-        System.out.println(min);
+        System.out.println(min - 1);
     }
 
     // 같은 섬끼리 같은 숫자로 컬러링
@@ -71,38 +71,33 @@ public class BOJ_G3_2146 {
     // 섬끼리 연결되는 다리 찾기
     private static int search(int i, int j) {
 
-        int len = 0; // 다리의 길이
         int color = island[i][j]; // 탐색 출발 섬
 
         boolean[][] visited = new boolean[N][N]; // 방문체크
 
         Queue<int[]> queue = new ArrayDeque<>();
-        queue.offer(new int[] { i, j });
+        queue.offer(new int[] { i, j, 0 });
         visited[i][j] = true;
 
-        while (true) {
-            int size = queue.size();
-            while (size-- > 0) {
-                int[] top = queue.poll();
+        while (!queue.isEmpty()) {
+            int[] top = queue.poll();
 
-                for (int d = 0; d < 4; d++) {
-                    int nx = top[0] + dx[d];
-                    int ny = top[1] + dy[d];
-                    if (nx >= 0 && nx < N && ny >= 0 && ny < N && !visited[nx][ny]) {
-                        if (island[nx][ny] > 1 && island[nx][ny] != color) {
-                            return len;
-                        }
-                        queue.offer(new int[] { nx, ny });
+            if (island[top[0]][top[1]] != 0 && island[top[0]][top[1]] != color) {
+                return top[2];
+            }
+
+            for (int d = 0; d < 4; d++) {
+                int nx = top[0] + dx[d];
+                int ny = top[1] + dy[d];
+                if (nx >= 0 && nx < N && ny >= 0 && ny < N) {
+                    if (!visited[nx][ny] && island[nx][ny] != color) {
+                        queue.offer(new int[]{ nx, ny, top[2] + 1 });
                         visited[nx][ny] = true;
                     }
                 }
             }
-
-            len++;
-
-            if (queue.isEmpty()) {
-                return 201;
-            }
         }
+
+        return 201;
     }
 }
