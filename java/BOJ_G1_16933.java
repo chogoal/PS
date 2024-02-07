@@ -8,7 +8,6 @@ import java.util.StringTokenizer;
 public class BOJ_G1_16933 {
 
     static int N, M, K;
-    static int count;
     static int[][] map;
     static int[][][] visited;
     static int[] dx = { 0, 1, 0, -1 };
@@ -17,11 +16,13 @@ public class BOJ_G1_16933 {
     static class Point {
         int i;
         int j;
+        int count;
         int blocked;
 
-        public Point(int i, int j, int blocked) {
+        public Point(int i, int j, int count, int blocked) {
             this.i = i;
             this.j = j;
+            this.count = count;
             this.blocked = blocked;
         }
     }
@@ -33,7 +34,6 @@ public class BOJ_G1_16933 {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
         K = Integer.parseInt(st.nextToken());
-        count = 1;
         map = new int[N][M];
         visited = new int[K + 1][N][M];
 
@@ -50,44 +50,36 @@ public class BOJ_G1_16933 {
     private static int bfs() {
 
         Queue<Point> queue = new ArrayDeque<Point>();
-        queue.offer(new Point(0, 0, 0));
+        queue.offer(new Point(0, 0, 1, 0));
         visited[0][0][0] = 1;
 
-        while (true) {
+        while (!queue.isEmpty()) {
 
-            int size = queue.size();
-            while (size-- > 0) {
-                Point now = queue.poll();
+            Point now = queue.poll();
 
-                if (now.i == N - 1 && now.j == M - 1) {
-                    return count;
-                }
+            if (now.i == N - 1 && now.j == M - 1) {
+                return now.count;
+            }
 
-                for (int d = 0; d < 4; d++) {
-                    int nx = now.i + dx[d];
-                    int ny = now.j + dy[d];
-                    if (nx < 0 || nx >= N || ny < 0 || ny >= M) continue;
+            for (int d = 0; d < 4; d++) {
+                int nx = now.i + dx[d];
+                int ny = now.j + dy[d];
+                if (nx < 0 || nx >= N || ny < 0 || ny >= M) continue;
 
-                    if (map[nx][ny] == 0 && visited[now.blocked][nx][ny] == 0) {
-                        queue.offer(new Point(nx, ny, now.blocked));
-                        visited[now.blocked][nx][ny] = 1;
-                    } else if (map[nx][ny] == 1 && now.blocked < K && visited[now.blocked + 1][nx][ny] == 0) {
-                        if (count == 0 || count % 2 == 1) {
-                            queue.offer(new Point(nx, ny, now.blocked + 1));
-                            visited[now.blocked + 1][nx][ny] = 1;
-                        } else { // 밤일 경우, 한 번 머무르기
-                            queue.offer(new Point(now.i, now.j, now.blocked));
-                        }
+                if (map[nx][ny] == 0 && visited[now.blocked][nx][ny] == 0) {
+                    queue.offer(new Point(nx, ny, now.count + 1, now.blocked));
+                    visited[now.blocked][nx][ny] = 1;
+                } else if (map[nx][ny] == 1 && now.blocked < K && visited[now.blocked + 1][nx][ny] == 0) {
+                    if (now.count == 0 || now.count % 2 == 1) {
+                        queue.offer(new Point(nx, ny, now.count + 1, now.blocked + 1));
+                        visited[now.blocked + 1][nx][ny] = 1;
+                    } else { // 밤일 경우, 한 번 머무르기
+                        queue.offer(new Point(now.i, now.j, now.count + 1, now.blocked));
                     }
                 }
-
             }
-
-            if (queue.isEmpty()) {
-                return -1;
-            }
-
-            count++;
         }
+
+        return -1;
     }
 }
