@@ -28,11 +28,14 @@ public class BOJ_S1_1629 {
         // 지수의 절반 값 구하기
         long half = pow(A, B / 2);
 
+        // C로 모듈러 연산 (x * y) % z = (x % z) * (y % z) % z
+        long answer = (half % C) * (half % C) % C;
+
         // 지수가 홀수일 경우, 한 번 더 곱해주기
-        if (B % 2 == 1) {
-            return ((half * half % C) * (A % C)) % C;
+        if (B % 2 == 0) {
+            return answer;
         } else {
-            return ((half % C) * (half % C)) % C;
+            return answer * (A % C) % C;
         }
     }
 }
