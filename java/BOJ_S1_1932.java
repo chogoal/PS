@@ -18,7 +18,7 @@ public class BOJ_S1_1932 {
 
         for (int i = 0; i < n; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < i; j++) {
+            for (int j = 0; j <= i; j++) {
                 triangle[i][j] = Integer.parseInt(st.nextToken());
                 if (i == n - 1) {
                     dp[i][j] = triangle[i][j];
