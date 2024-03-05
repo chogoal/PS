@@ -7,10 +7,11 @@ public class BOJ_G3_16236 {
 
     static int N;
     static int[][] area; // 9: 아기 상어, 1~6: 물고기(크기)
-    static int fish; // 물고기 수
+    static int[] fish = new int[7];
     static Shark shark; // 아기상어
+    static int time;
 
-    static int[] dx = { -1, 0, 0, 1 }; // 상좌우하
+    static int[] dx = { -1, 0, 0, 1 };
     static int[] dy = { 0, -1, 1, 0 };
 
     static class Shark {
@@ -35,27 +36,27 @@ public class BOJ_G3_16236 {
         }
     }
 
-    static class Fish implements Comparable<Fish> {
+    static class Point implements Comparable<Point> {
         int x;
         int y;
-        int dist;
+        int time;
 
-        public Fish(int x, int y, int dist) {
+        public Point(int x, int y, int time) {
             this.x = x;
             this.y = y;
-            this.dist = dist;
+            this.time = time;
         }
 
         @Override
-        public int compareTo(Fish o) {
+        public int compareTo(Point o) {
 
-            if (this.dist == o.dist) {
+            if (this.time == o.time) {
                 if (this.x == o.x) {
                     return this.y - o.y;
                 }
                 return this.x - o.x;
             }
-            return this.dist - o.dist;
+            return this.time - o.time;
         }
     }
 
@@ -71,74 +72,57 @@ public class BOJ_G3_16236 {
                 area[i][j] = Integer.parseInt(st.nextToken());
 
                 if (area[i][j] == 9) { shark = new Shark(i, j, 2); area[i][j] = 0; }
-                else if (area[i][j] >= 1 && area[i][j] <= 6) { fish++; }
-            }
-        }
-
-        System.out.println(move());
-    }
-
-    private static int move() {
-
-        int time = 0;
-
-        while (true) {
-
-            if (fish == 0) break;
-
-            // 이동 경로 저장
-            Queue<int[]> queue = new ArrayDeque<int[]>();
-            queue.offer(new int[] { shark.x, shark.y, 0 });
-
-            // 방문 체크
-            boolean[][] visited = new boolean[N][N];
-            visited[shark.x][shark.y] = true;
-
-            // 현재 위치에서 먹을 수 있는 물고기 찾기
-            // - 아기 상어보다 작은 크기의 물고기 (= 먹을 수 있음)
-            // - 아기 상어와 같은 크기의 물고기 (= 먹을 수 없지만 지나갈 수 있음)
-            // - 아기 상어보다 큰 크기의 물고기 (= 지나갈 수 없음)
-            ArrayList<Fish> targetList = new ArrayList<Fish>();
-            boolean isTarget = false;
-
-            while (!queue.isEmpty()) {
-                int[] now = queue.poll();
-
-                for (int d = 0; d < 4; d++) {
-                    int nx = now[0] + dx[d];
-                    int ny = now[1] + dy[d];
-                    if (nx < 0 || nx >= N || ny < 0 || ny >= N || visited[nx][ny]) continue;
-
-                    int check = area[nx][ny];
-                    if (check == 0 || check == shark.size) {
-                        queue.offer(new int[] { nx, ny, now[2] + 1 });
-                        visited[nx][ny] = true;
-                    } else if (check < shark.size) {
-                        targetList.add(new Fish(nx, ny, now[2] + 1));
-                        isTarget = true;
-                    }
+                else if (area[i][j] >= 1 && area[i][j] <= 6) {
+                    fish[area[i][j]]++;
                 }
             }
-
-
-
-            // 물고기 먹기
-            if (isTarget) {
-
-                // 가장 위쪽의 가장 왼쪽에 위치한 물고기 찾기
-                Collections.sort(targetList);
-                Fish target = targetList.get(0);
-
-                shark.x = target.x; shark.y = target.y;
-                shark.eat();
-                fish--;
-                area[target.x][target.y] = 0;
-                time += target.dist;
-            } else {
-                break;
-            }
         }
 
-        return time;
+        while (move());
+
+        System.out.println(time);
+    }
+
+    private static boolean move() {
+
+        if (!fishExist()) return false;
+
+        PriorityQueue<Point> pq = new PriorityQueue<Point>();
+        boolean[][] visited = new boolean[N][N];
+        pq.add(new Point(shark.x, shark.y, 0));
+        visited[shark.x][shark.y] = true;
+
+        while (!pq.isEmpty()) {
+            Point now = pq.poll();
+
+            if (area[now.x][now.y] != 0 && area[now.x][now.y] < shark.size) {
+                shark.x = now.x; shark.y = now.y;
+                shark.eat();
+                fish[area[now.x][now.y]]--;
+                area[now.x][now.y] = 0;
+                time += now.time;
+                return true;
+            }
+
+            for (int d = 0; d < 4; d++) {
+                int nx = now.x + dx[d];
+                int ny = now.y + dy[d];
+                if (nx < 0 || nx >= N || ny < 0 || ny >= N || visited[nx][ny]) continue;
+
+                if (area[nx][ny] > shark.size) continue;
+
+                pq.add(new Point(nx, ny, now.time + 1));
+                visited[nx][ny] = true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean fishExist() {
+
+        for (int i = 1; i < Math.min(shark.size, 7); i++) {
+            if (fish[i] > 0) return true;
+        }
+        return false;
     }
 }
