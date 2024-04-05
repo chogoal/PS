@@ -6,49 +6,33 @@ public class BOJ_G5_2011 {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String code = br.readLine();
 
-        String s = br.readLine();
-        int n = s.length();
-        int[] code = new int[n];
-        int[][] dp = new int[n][2]; // [0]: 앞의 숫자와 연속, [1]: 앞의 숫자와 불연속
-
-        for (int i = 0; i < n; i++) {
-            code[i] = s.charAt(i) - '0';
-        }
-
-        if (code[0] == 0) {
+        if (code.charAt(0) == '0') {
             System.out.println(0);
             return;
         }
-        dp[0][0] = 0;
-        dp[0][1] = 1;
 
-        for (int i = 1; i < n; i++) {
+        int[] dp = new int[code.length() + 1];
+        dp[0] = dp[1] = 1;
 
-            if (code[i] == 0) {
-                if (!check(code[i - 1], code[i])) {
-                    System.out.println(0);
-                    return;
-                }
-                dp[i][0] = dp[i - 1][1];
-                dp[i][1] = 0;
+        for (int i = 2; i <= code.length(); i++) {
+            int number = code.charAt(i - 1) - '0'; // 현재 수
+            int prev = code.charAt(i - 2) - '0'; // 앞의 수
+
+            if (number == 0) { // 현재 수가 0이라면 무조건 앞의 수와 연결되야 함
+                if (prev == 1 || prev == 2) dp[i] = dp[i - 2] % 1000000;
+                else break;
             } else {
-                if (check(code[i - 1], code[i])) {
-                    dp[i][0] = dp[i - 1][1];
+                int check = prev * 10 + number;
+                if (check >= 10 && check <= 26) {
+                    dp[i] = (dp[i - 1] + dp[i - 2]) % 1000000;
                 } else {
-                    dp[i][0] = 0;
+                    dp[i] = dp[i - 1] % 1000000;
                 }
-                dp[i][1] = (dp[i - 1][0] + dp[i - 1][1]) % 1000000;
             }
         }
 
-        System.out.println((dp[n - 1][0] + dp[n - 1][1]) % 1000000);
-    }
-
-    private static boolean check(int a, int b) {
-
-        // 숫자 ab가 10~26 인지 확인
-        int num = a * 10 + b;
-        return num >= 10 && num <= 26;
+        System.out.println(dp[code.length()]);
     }
 }
