@@ -38,11 +38,11 @@ public class BOJ_G5_2011 {
                 } else {
                     dp[i][0] = 0;
                 }
-                dp[i][1] = (dp[i - 1][0] % 1000000 + dp[i - 1][1] % 1000000) % 1000000;
+                dp[i][1] = (dp[i - 1][0] + dp[i - 1][1]) % 1000000;
             }
         }
 
-        System.out.println((dp[n - 1][0] % 1000000 + dp[n - 1][1] % 1000000) % 1000000);
+        System.out.println((dp[n - 1][0] + dp[n - 1][1]) % 1000000);
     }
 
     private static boolean check(int a, int b) {
