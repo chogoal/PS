@@ -13,10 +13,12 @@ public class BOJ_B3_17945 {
         int A = Integer.parseInt(st.nextToken());
         int B = Integer.parseInt(st.nextToken());
 
-        for (int i = -1000; i <= 1000; i++) {
-            if (i * i + 2 * A * i + B == 0) sb.append(i).append(" ");
-        }
+        if (A * A == B) System.out.println(-A);
+        else {
+            int value = (int) Math.sqrt(A * A - B);
+            sb.append(-A - value).append(" ").append(-A + value);
 
-        System.out.println(sb.toString());
+            System.out.println(sb.toString());
+        }
     }
 }
