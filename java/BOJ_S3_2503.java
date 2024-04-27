@@ -5,59 +5,58 @@ import java.util.StringTokenizer;
 
 public class BOJ_S3_2503 {
 
+    static int N;
+    static int[][] guess;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int[] numbers = new int[504];
-        int idx = 0;
+        N = Integer.parseInt(br.readLine());
+        guess = new int[N][5];
+
+        for (int i = 0; i < N; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+
+            String number = st.nextToken(); // number
+            guess[i][0] = number.charAt(0) - '0';
+            guess[i][1] = number.charAt(1) - '0';
+            guess[i][2] = number.charAt(2) - '0';
+            guess[i][3] = Integer.parseInt(st.nextToken()); // strike
+            guess[i][4] = Integer.parseInt(st.nextToken()); // ball
+        }
+
+        int cnt = 0;
         for (int i = 1; i <= 9; i++) {
             for (int j = 1; j <= 9; j++) {
                 for (int k = 1; k <= 9; k++) {
                     if (i == j || j == k || k == i) continue;
-                    numbers[idx++] = i * 100 + j * 10 + k;
+
+                    if (check(i, j, k)) cnt++;
                 }
             }
-        }
-
-        int N = Integer.parseInt(br.readLine());
-        String[] guess = new String[N];
-        int[][] result = new int[N][2];
-        for (int i = 0; i < N; i++) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            guess[i] = st.nextToken();
-            result[i][0] = Integer.parseInt(st.nextToken()); // strike
-            result[i][1] = Integer.parseInt(st.nextToken()); // ball
-        }
-
-        int cnt = 504;
-        for (int i = 0; i < 504; i++) {
-
-            boolean ok = true;
-            String num = numbers[i] + "";
-
-            for (int j = 0; j < N; j++) {
-
-                int strike = 0;
-                int ball = 0;
-
-                for (int m = 0; m < 3; m++) {
-                    for (int n = 0; n < 3; n++) {
-                        if (num.charAt(n) == guess[j].charAt(m)) {
-                            if (m == n) strike++;
-                            else ball++;
-                        }
-                    }
-                }
-
-                if (strike != result[j][0] || ball != result[j][1]) {
-                    ok = false;
-                    break;
-                }
-            }
-
-            if (!ok) cnt--;
         }
 
         System.out.println(cnt);
+    }
+
+    private static boolean check(int i, int j, int k) {
+
+        for (int n = 0; n < N; n++) {
+
+            int strike = 0;
+            int ball = 0;
+
+            if (guess[n][0] == i) strike++;
+            if (guess[n][1] == j) strike++;
+            if (guess[n][2] == k) strike++;
+
+            if (guess[n][0] == j || guess[n][0] == k) ball++;
+            if (guess[n][1] == i || guess[n][1] == k) ball++;
+            if (guess[n][2] == i || guess[n][2] == j) ball++;
+
+            if (guess[n][3] != strike || guess[n][4] != ball) return false;
+        }
+
+        return true;
     }
 }
