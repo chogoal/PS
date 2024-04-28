@@ -30,10 +30,6 @@ public class BOJ_G4_14718 {
             c[i] = points[i][2];
         }
 
-        Arrays.sort(a);
-        Arrays.sort(b);
-        Arrays.sort(c);
-
         int min = 3000001;
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
