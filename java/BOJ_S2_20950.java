@@ -7,7 +7,7 @@ public class BOJ_S2_20950 {
 
     static int N;
     static int[][] color;
-    static int[] gomduri, munduri, selected;
+    static int[] gomduri;
     static int min = Integer.MAX_VALUE;
 
     public static void main(String[] args) throws IOException {
@@ -30,39 +30,26 @@ public class BOJ_S2_20950 {
         }
 
         for (int i = 2; i <= 7; i++) {
-            selected = new int[i];
-
-            comb(0, 0, i);
+            comb(0, 0, i, 0, 0, 0);
         }
 
         System.out.println(min);
     }
 
-    private static void comb(int cnt, int idx, int goal) {
+    private static void comb(int cnt, int idx, int goal, int r, int g, int b) {
 
         if (cnt == goal) {
-            min = Math.min(min, rgb(cnt));
+            int sum = 0;
+            sum += Math.abs(gomduri[0] - r / cnt);
+            sum += Math.abs(gomduri[1] - g / cnt);
+            sum += Math.abs(gomduri[2] - b / cnt);
+
+            min = Math.min(min, sum);
             return;
         }
 
         for (int i = idx; i < N; i++) {
-            selected[cnt] = i;
-            comb(cnt + 1, i + 1, goal);
+            comb(cnt + 1, i + 1, goal, r + color[i][0], g + color[i][1], b + color[i][2]);
         }
-    }
-
-    private static int rgb(int cnt) {
-
-        munduri = new int[3];
-        for (int s : selected) {
-            for (int i = 0; i < 3; i++) munduri[i] += color[s][i];
-        }
-
-        int sum = 0;
-        for (int i = 0; i < 3; i++) {
-            sum += Math.abs(gomduri[i] - munduri[i] / cnt);
-        }
-
-        return sum;
     }
 }
