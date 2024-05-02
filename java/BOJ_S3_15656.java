@@ -7,8 +7,7 @@ import java.util.StringTokenizer;
 public class BOJ_S3_15656 {
 
     static int N, M;
-    static int[] array;
-    static int[] selected;
+    static int[] numbers, selected;
     static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
@@ -17,34 +16,32 @@ public class BOJ_S3_15656 {
 
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        array = new int[N];
+        numbers = new int[N];
         selected = new int[M];
 
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < N; i++) {
-            array[i] = Integer.parseInt(st.nextToken());
+            numbers[i] = Integer.parseInt(st.nextToken());
         }
 
-        Arrays.sort(array);
+        Arrays.sort(numbers);
 
-        comb(0);
+        perm(0);
 
         System.out.println(sb.toString());
     }
 
-    private static void comb(int cnt) {
+    private static void perm(int cnt) {
 
         if (cnt == M) {
-            for (int s : selected) {
-                sb.append(s).append(" ");
-            }
+            for (int s : selected) sb.append(s).append(" ");
             sb.append("\n");
             return;
         }
 
         for (int i = 0; i < N; i++) {
-            selected[cnt] = array[i];
-            comb(cnt + 1);
+            selected[cnt] = numbers[i];
+            perm(cnt + 1);
         }
     }
 }
