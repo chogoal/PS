@@ -6,38 +6,43 @@ import java.util.StringTokenizer;
 public class BOJ_S2_1182 {
 
     static int N, S;
-    static int[] array;
+    static int[] numbers, selected;
     static int count;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        StringBuilder sb = new StringBuilder();
 
         N = Integer.parseInt(st.nextToken());
         S = Integer.parseInt(st.nextToken());
-        array = new int[N];
+        numbers = new int[N];
 
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < N; i++) {
-            array[i] = Integer.parseInt(st.nextToken());
+            numbers[i] = Integer.parseInt(st.nextToken());
         }
 
-        subset(0, 0);
+        for (int i = 1; i <= N; i++) {
+            selected = new int[i];
 
-        System.out.println(S == 0 ? count - 1 : count);
+            comb(0, 0, i);
+        }
+
+        System.out.println(count);
     }
 
-    private static void subset(int cur, int sum) {
+    private static void comb(int cnt, int idx, int goal) {
 
-        if (cur == N) {
-            if (sum == S) {
-                count++;
-            }
+        if (cnt == goal) {
+            int sum = 0;
+            for (int s : selected) sum += s;
+            if (sum == S) count++;
             return;
         }
 
-        subset(cur + 1, sum);
-        subset(cur + 1, sum + array[cur]);
+        for (int i = idx; i < N; i++) {
+            selected[cnt] = numbers[i];
+            comb(cnt + 1, i + 1, goal);
+        }
     }
 }
