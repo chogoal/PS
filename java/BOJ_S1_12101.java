@@ -8,41 +8,34 @@ import java.util.StringTokenizer;
 public class BOJ_S1_12101 {
 
     static int n, k;
-    static List<String> list;
+    static List<StringBuilder> list;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        StringBuilder sb = new StringBuilder();
 
         n = Integer.parseInt(st.nextToken());
         k = Integer.parseInt(st.nextToken());
         list = new ArrayList<>();
 
-        sum(0, "");
-
-        if (list.size() < k) sb.append(-1);
-        else {
-            String nums = list.get(k - 1);
-            for (int i = 0; i < nums.length() - 1; i++) {
-                sb.append(nums.charAt(i)).append("+");
-            }
-            sb.append(nums.charAt(nums.length() - 1));
+        for (int i = 1; i <= 3; i++) {
+            sum(i, new StringBuilder().append(i));
         }
 
-        System.out.println(sb.toString());
+        System.out.println(list.size() < k ? -1 : list.get(k - 1));
     }
 
-    private static void sum(int value, String nums) {
+    private static void sum(int value, StringBuilder sb) {
+
+        if (value > n) return;
 
         if (value == n) {
-            list.add(nums);
+            list.add(sb);
             return;
         }
 
         for (int i = 1; i <= 3; i++) {
-            if (value + i > n) break;
-            sum(value + i, nums + i);
+            sum(value + i, new StringBuilder(sb).append("+").append(i));
         }
     }
 }
