@@ -6,9 +6,7 @@ import java.util.StringTokenizer;
 public class BOJ_S1_14888 {
 
     static int N;
-    static int[] number;
-    static int[] opCnt = new int[4];
-
+    static int[] A, mod;
     static int min = Integer.MAX_VALUE;
     static int max = Integer.MIN_VALUE;
 
@@ -17,45 +15,42 @@ public class BOJ_S1_14888 {
         StringBuilder sb = new StringBuilder();
 
         N = Integer.parseInt(br.readLine());
-        number = new int[N];
+        A = new int[N];
+        mod = new int[4];
 
         StringTokenizer st = new StringTokenizer(br.readLine());
         for (int i = 0; i < N; i++) {
-            number[i] = Integer.parseInt(st.nextToken());
+            A[i] = Integer.parseInt(st.nextToken());
         }
 
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < 4; i++) {
-            opCnt[i] = Integer.parseInt(st.nextToken());
+            mod[i] = Integer.parseInt(st.nextToken());
         }
 
-        dfs(0, number[0]);
+        cal(1, A[0]);
 
         sb.append(max).append("\n").append(min);
         System.out.println(sb.toString());
     }
 
-    private static void dfs(int cnt, int value) {
+    private static void cal(int cnt, int value) {
 
-        if (cnt == N - 1) {
-            min = Math.min(min, value);
+        if (cnt == N) {
             max = Math.max(max, value);
+            min = Math.min(min, value);
             return;
         }
 
         for (int i = 0; i < 4; i++) {
-            if (opCnt[i] > 0) {
-                opCnt[i]--;
+            if (mod[i] == 0) continue;
 
-                switch (i) {
-                    case 0: dfs(cnt + 1, value + number[cnt + 1]); break;
-                    case 1: dfs(cnt + 1, value - number[cnt + 1]); break;
-                    case 2: dfs(cnt + 1, value * number[cnt + 1]); break;
-                    case 3: dfs(cnt + 1, value / number[cnt + 1]); break;
-                }
-
-                opCnt[i]++;
-            }
+            mod[i]--;
+            if (i == 0) cal(cnt + 1, value + A[cnt]);
+            else if (i == 1) cal(cnt + 1, value - A[cnt]);
+            else if (i == 2) cal(cnt + 1, value * A[cnt]);
+            else cal(cnt + 1, value / A[cnt]);
+            mod[i]++;
         }
     }
 }
