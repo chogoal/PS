@@ -5,7 +5,6 @@ import java.util.StringTokenizer;
 
 public class BOJ_S1_16943 {
 
-    static String A;
     static int B, len;
     static int[] nums;
     static boolean[] visited;
@@ -15,7 +14,7 @@ public class BOJ_S1_16943 {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        A = st.nextToken();
+        String A = st.nextToken();
         B = Integer.parseInt(st.nextToken());
         len = A.length();
 
@@ -26,17 +25,15 @@ public class BOJ_S1_16943 {
             nums[i] = A.charAt(i) - '0';
         }
 
-        perm(0, "");
+        perm(0, 0);
 
         System.out.println(max == Integer.MIN_VALUE ? -1 : max);
     }
 
-    private static void perm(int cnt, String C) {
+    private static void perm(int cnt, int C) {
 
         if (cnt == len) {
-            if (!C.equals(A) && Integer.parseInt(C) < B) {
-                max = Math.max(max, Integer.parseInt(C));
-            }
+            if (C < B) max = Math.max(max, C);
             return;
         }
 
@@ -44,7 +41,7 @@ public class BOJ_S1_16943 {
             if (visited[i]) continue;
             if (cnt == 0 && nums[i] == 0) continue;
             visited[i] = true;
-            perm(cnt + 1, C + nums[i]);
+            perm(cnt + 1, C * 10 + nums[i]);
             visited[i] = false;
         }
     }
