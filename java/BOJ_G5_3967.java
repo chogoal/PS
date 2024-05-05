@@ -50,13 +50,9 @@ public class BOJ_G5_3967 {
 
     private static boolean perm(int cnt) {
 
-        if (cnt == 12) {
-            return check();
-        }
+        if (cnt == 12) return check();
 
-        if (nums[cnt] != 0) {
-            return perm(cnt + 1);
-        }
+        if (nums[cnt] != 0) return perm(cnt + 1);
 
         for (int i = 1; i <= 12; i++) {
             if (selected[i - 1]) continue;
