@@ -5,10 +5,8 @@ import java.util.StringTokenizer;
 
 public class BOJ_S2_6603 {
 
-    static int N;
-    static int[] array;
-    static int[] selected;
-    static boolean[] checked;
+    static int k;
+    static int[] nums, selected;
     static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
@@ -17,15 +15,14 @@ public class BOJ_S2_6603 {
         while (true) {
             StringTokenizer st = new StringTokenizer(br.readLine());
 
-            N = Integer.parseInt(st.nextToken());
-            if (N == 0) break;
+            k = Integer.parseInt(st.nextToken());
+            if (k == 0) break;
 
-            array = new int[N];
+            nums = new int[k];
             selected = new int[6];
-            checked = new boolean[N];
 
-            for (int i = 0; i < N; i++) {
-                array[i] = Integer.parseInt(st.nextToken());
+            for (int i = 0; i < k; i++) {
+                nums[i] = Integer.parseInt(st.nextToken());
             }
 
             comb(0, 0);
@@ -36,23 +33,17 @@ public class BOJ_S2_6603 {
         System.out.println(sb.toString());
     }
 
-    private static void comb(int cnt, int start) {
+    private static void comb(int cnt, int idx) {
 
         if (cnt == 6) {
-            for (int s : selected) {
-                sb.append(s).append(" ");
-            }
+            for (int s : selected) sb.append(s).append(" ");
             sb.append("\n");
             return;
         }
 
-        for (int i = start; i < N; i++) {
-            if (!checked[i]) {
-                checked[i] = true;
-                selected[cnt] = array[i];
-                comb(cnt + 1, i + 1);
-                checked[i] = false;
-            }
+        for (int i = idx; i < k; i++) {
+            selected[cnt] = nums[i];
+            comb(cnt + 1, i + 1);
         }
     }
 }
