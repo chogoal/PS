@@ -7,7 +7,7 @@ import java.util.StringTokenizer;
 public class BOJ_G5_1759 {
 
     static int L, C;
-    static char[] alphabets, selected;
+    static char[] alphabets;
     static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
@@ -17,7 +17,6 @@ public class BOJ_G5_1759 {
         L = Integer.parseInt(st.nextToken());
         C = Integer.parseInt(st.nextToken());
         alphabets = new char[C];
-        selected = new char[L];
 
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < C; i++) {
@@ -26,31 +25,29 @@ public class BOJ_G5_1759 {
 
         Arrays.sort(alphabets);
 
-        code(0, 0);
+        code(0, "");
 
         System.out.println(sb.toString());
     }
 
-    private static void code(int cnt, int idx) {
+    private static void code(int cur, String selected) {
 
-        if (cnt == L) {
-            if (check()) {
-                for (char s : selected) sb.append(s);
-                sb.append("\n");
+        if (cur == C) {
+            if (selected.length() == L && check(selected)) {
+                sb.append(selected).append("\n");
             }
             return;
         }
 
-        for (int i = idx; i < C; i++) {
-            selected[cnt] = alphabets[i];
-            code(cnt + 1, i + 1);
-        }
+        code(cur + 1, selected + alphabets[cur]);
+        code(cur + 1, selected);
     }
 
-    private static boolean check() {
+    private static boolean check(String selected) {
 
         int v = 0, c = 0;
-        for (char s : selected) {
+        for (int i = 0; i < selected.length(); i++) {
+            char s = selected.charAt(i);
             if (s == 'a' || s == 'e' || s == 'i' || s == 'o' || s == 'u') v++;
             else c++;
         }
