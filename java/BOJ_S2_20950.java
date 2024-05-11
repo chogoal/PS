@@ -7,7 +7,7 @@ public class BOJ_S2_20950 {
 
     static int N;
     static int[][] color;
-    static int[] gomduri;
+    static int gr, gg, gb;
     static int min = Integer.MAX_VALUE;
 
     public static void main(String[] args) throws IOException {
@@ -15,7 +15,6 @@ public class BOJ_S2_20950 {
 
         N = Integer.parseInt(br.readLine());
         color = new int[N][3];
-        gomduri = new int[3];
 
         for (int i = 0; i < N; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
@@ -25,31 +24,28 @@ public class BOJ_S2_20950 {
         }
 
         StringTokenizer st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < 3; i++) {
-            gomduri[i] = Integer.parseInt(st.nextToken());
-        }
+        gr = Integer.parseInt(st.nextToken());
+        gg = Integer.parseInt(st.nextToken());
+        gb = Integer.parseInt(st.nextToken());
 
-        for (int i = 2; i <= 7; i++) {
-            comb(0, 0, i, 0, 0, 0);
-        }
+        comb(0, 0, 0, 0, 0);
 
         System.out.println(min);
     }
 
-    private static void comb(int cnt, int idx, int goal, int r, int g, int b) {
+    private static void comb(int cur, int cnt, int r, int g, int b) {
 
-        if (cnt == goal) {
-            int sum = 0;
-            sum += Math.abs(gomduri[0] - r / cnt);
-            sum += Math.abs(gomduri[1] - g / cnt);
-            sum += Math.abs(gomduri[2] - b / cnt);
+        if (cnt > 7) return;
 
-            min = Math.min(min, sum);
+        if (cur == N) {
+            if (cnt > 1) {
+                int diff = Math.abs(gr - r / cnt) + Math.abs(gg - g / cnt) + Math.abs(gb - b / cnt);
+                min = Math.min(min, diff);
+            }
             return;
         }
 
-        for (int i = idx; i < N; i++) {
-            comb(cnt + 1, i + 1, goal, r + color[i][0], g + color[i][1], b + color[i][2]);
-        }
+        comb(cur + 1, cnt + 1, r + color[cur][0], g + color[cur][1], b + color[cur][2]);
+        comb(cur + 1, cnt, r, g, b);
     }
 }
