@@ -33,40 +33,37 @@ public class BOJ_S1_24954 {
             }
         }
 
-        comb(0, new boolean[N], new int[N]);
+        order(0, new boolean[N]);
 
         System.out.println(min);
     }
 
-    private static void comb(int cur, boolean[] selected, int[] order) {
+    private static void order(int cur, boolean[] selected) {
 
         if (cur == N) {
-            min = Math.min(min, coin(order));
+            int sum = 0;
+            for (int c : cost) sum += Math.max(c, 1);
+            min = Math.min(min, sum);
             return;
         }
 
+        // cur 번째로 사야하는 물약 고르기
         for (int i = 0; i < N; i++) {
             if (selected[i]) continue;
+
             selected[i] = true;
-            order[cur] = i;
-            comb(cur + 1, selected, order);
-            selected[i] = false;
-        }
-    }
-
-    private static int coin(int[] order) {
-
-        int sum = 0;
-        int[] coin = new int[N];
-
-        for (int i = 0; i < N; i++) {
-            coin[order[i]] += cost[order[i]];
             for (int j = 0; j < N; j++) {
-                coin[j] -= sale[order[i]][j];
+                if (selected[j]) continue;
+                cost[j] -= sale[i][j];
             }
-            sum += Math.max(coin[order[i]], 1);
-        }
 
-        return sum;
+            order(cur + 1, selected);
+
+            selected[i] = false;
+            for (int j = 0; j < N; j++) {
+                if (selected[j]) continue;
+                cost[j] += sale[i][j];
+            }
+        }
     }
 }
