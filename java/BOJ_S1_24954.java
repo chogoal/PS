@@ -33,16 +33,14 @@ public class BOJ_S1_24954 {
             }
         }
 
-        order(0, new boolean[N]);
+        order(0, new boolean[N], 0);
 
         System.out.println(min);
     }
 
-    private static void order(int cur, boolean[] selected) {
+    private static void order(int cur, boolean[] selected, int sum) {
 
         if (cur == N) {
-            int sum = 0;
-            for (int c : cost) sum += Math.max(c, 1);
             min = Math.min(min, sum);
             return;
         }
@@ -57,7 +55,7 @@ public class BOJ_S1_24954 {
                 cost[j] -= sale[i][j];
             }
 
-            order(cur + 1, selected);
+            order(cur + 1, selected, sum + Math.max(cost[i], 1));
 
             selected[i] = false;
             for (int j = 0; j < N; j++) {
