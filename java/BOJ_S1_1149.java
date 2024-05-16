@@ -13,7 +13,7 @@ public class BOJ_S1_1149 {
 
         N = Integer.parseInt(br.readLine());
         cost = new int[N][3];
-        dp = new int[N][3];
+        dp = new int[N][4];
 
         for (int i = 0; i < N; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
@@ -22,7 +22,7 @@ public class BOJ_S1_1149 {
             }
         }
 
-        System.out.println(Math.min(recur(0, 0), Math.min(recur(0, 1), recur(0, 2))));
+        System.out.println(recur(0, 0));
     }
 
     private static int recur(int cur, int prev) {
@@ -32,9 +32,9 @@ public class BOJ_S1_1149 {
         if (dp[cur][prev] != 0) return dp[cur][prev];
 
         int min = Integer.MAX_VALUE;
-        for (int i = 0; i < 3; i++) {
+        for (int i = 1; i <= 3; i++) {
             if (prev == i) continue;
-            min = Math.min(min, recur(cur + 1, i) + cost[cur][i]);
+            min = Math.min(min, recur(cur + 1, i) + cost[cur][i - 1]);
         }
 
         dp[cur][prev] = min;
