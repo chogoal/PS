@@ -6,10 +6,9 @@ import java.util.StringTokenizer;
 public class BOJ_G3_1520 {
 
     static int M, N;
-    static int[][] map;
-    static int[][] dp;
-    static int[] dx = { 0, 1, 0, -1 };
-    static int[] dy = { 1, 0, -1, 0 };
+    static int[][] map, dp;
+    static int[] dx = { -1, 1, 0, 0 };
+    static int[] dy = { 0, 0, -1, 1 };
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -28,30 +27,25 @@ public class BOJ_G3_1520 {
             }
         }
 
-        System.out.println(move(0, 0));
+        System.out.println(move(0, 0, map[0][0]));
     }
 
-    private static int move(int i, int j) {
+    private static int move(int x, int y, int h) {
 
-        if (i == M - 1 && j == N - 1) {
-            return 1;
-        }
+        if (x == M - 1 && y == N - 1) return 1;
 
-        if (dp[i][j] != -1) {
-            return dp[i][j];
-        }
+        if (dp[x][y] != -1) return dp[x][y];
 
-        dp[i][j] = 0; // 방문체크
+        dp[x][y] = 0;
         for (int d = 0; d < 4; d++) {
-            int nx = i + dx[d];
-            int ny = j + dy[d];
+            int nx = x + dx[d];
+            int ny = y + dy[d];
             if (nx < 0 || nx >= M || ny < 0 || ny >= N) continue;
-
-            if (map[nx][ny] < map[i][j]) {
-                dp[i][j] += move(nx, ny);
+            if (map[nx][ny] < h) {
+                dp[x][y] += move(nx, ny, map[nx][ny]);
             }
         }
 
-        return dp[i][j];
+        return dp[x][y];
     }
 }
