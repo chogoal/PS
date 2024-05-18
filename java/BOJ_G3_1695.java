@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class BOJ_G3_1695 {
@@ -21,16 +22,18 @@ public class BOJ_G3_1695 {
             array[i] = Integer.parseInt(st.nextToken());
         }
 
+        for (int i = 0; i < N; i++) {
+            Arrays.fill(dp[i], -1);
+        }
+
         System.out.println(insert(0, N - 1));
     }
 
     private static int insert(int fIdx, int bIdx) {
 
-        if (fIdx < 0 || fIdx >= N || bIdx < 0 || bIdx >= N) return 0;
+        if (dp[fIdx][bIdx] != -1) return dp[fIdx][bIdx];
 
-        if (fIdx >= bIdx) return 0;
-
-        if (dp[fIdx][bIdx] != 0) return dp[fIdx][bIdx];
+        if (fIdx >= bIdx) return dp[fIdx][bIdx] = 0;
 
         if (array[fIdx] == array[bIdx]) {
             dp[fIdx][bIdx] = insert(fIdx + 1, bIdx - 1);
