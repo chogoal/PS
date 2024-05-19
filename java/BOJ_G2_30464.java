@@ -32,19 +32,19 @@ public class BOJ_G2_30464 {
 
     private static int move(int cur, int reverse, int dir) {
 
-        if (cur < 0 || cur >= N) return Integer.MIN_VALUE;
+        if (reverse > 2 || cur < 0 || cur >= N) return Integer.MIN_VALUE;
 
         if (cur == N - 1) return 0;
 
+        if (num[cur] == 0) return Integer.MIN_VALUE;
+
         if (dp[cur][reverse] != -1) return dp[cur][reverse];
 
-        dp[cur][reverse] = Integer.MIN_VALUE;
-        if (reverse == 2) {
-            dp[cur][reverse] = move(cur + num[cur] * dir, reverse, dir) + 1;
-        } else {
-            dp[cur][reverse] = Math.max(move(cur + num[cur] * dir, reverse, dir),
-                                        move(cur - num[cur] * dir, reverse + 1, -dir)) + 1;
-        }
+        int time = Integer.MIN_VALUE;
+        time = Math.max(time, move(cur + num[cur] * dir, reverse, dir) + 1);
+        time = Math.max(time, move(cur - num[cur] * dir, reverse + 1, -dir) + 1);
+
+        dp[cur][reverse] = time;
         return dp[cur][reverse];
     }
 }
