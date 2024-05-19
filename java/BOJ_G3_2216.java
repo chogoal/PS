@@ -43,17 +43,16 @@ public class BOJ_G3_2216 {
         if (dp[x][y] != MIN) return dp[x][y];
 
         int score = MIN;
-
-        // X에 공백 추가
-        score = Math.max(score, compare(x, y + 1) + B);
-
-        // Y에 공백 추가
-        score = Math.max(score, compare(x + 1, y) + B);
-
-        // 공백 추가하지 않음
         if (X.charAt(x) == Y.charAt(y)) {
-            score = Math.max(score, compare(x + 1, y + 1) + A);
+            score = compare(x + 1, y + 1) + A;
         } else {
+            // X에 공백 추가
+            score = Math.max(score, compare(x, y + 1) + B);
+
+            // Y에 공백 추가
+            score = Math.max(score, compare(x + 1, y) + B);
+
+            // 공백 추가하지 않음
             score = Math.max(score, compare(x + 1, y + 1) + C);
         }
 
