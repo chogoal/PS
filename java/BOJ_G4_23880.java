@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class BOJ_G4_23880 {
@@ -28,6 +29,10 @@ public class BOJ_G4_23880 {
                     char c = line.charAt(j);
                     if (c == '.') map[i][j] = 0;
                     else map[i][j] = 1;
+
+                    for (int k = 0; k < 2; k++) {
+                        Arrays.fill(dp[i][j][k], -1);
+                    }
                 }
             }
 
@@ -43,7 +48,7 @@ public class BOJ_G4_23880 {
 
         if (y == N - 1 && x == N - 1) return 1;
 
-        if (dp[x][y][prev][dir] != 0) return dp[x][y][prev][dir];
+        if (dp[x][y][prev][dir] != -1) return dp[x][y][prev][dir];
 
         int count = 0;
         if (prev == 1) {
