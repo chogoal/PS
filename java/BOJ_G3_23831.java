@@ -28,14 +28,6 @@ public class BOJ_G3_23831 {
             }
         }
 
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                for (int k = 0; k < N; k++) {
-                    Arrays.fill(dp[i][j][k], -1);
-                }
-            }
-        }
-
         System.out.println(recur(0, 0, 0, 0));
     }
 
@@ -46,7 +38,7 @@ public class BOJ_G3_23831 {
             return Integer.MIN_VALUE;
         }
 
-        if (dp[cur][a][b][c] != -1) return dp[cur][a][b][c];
+        if (dp[cur][a][b][c] != 0) return dp[cur][a][b][c];
 
         int max = Integer.MIN_VALUE;
 
