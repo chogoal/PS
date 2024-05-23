@@ -7,6 +7,7 @@ import java.util.StringTokenizer;
 public class BOJ_G4_2698 {
 
     static int n, k;
+    static int[][][] dp;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -17,30 +18,35 @@ public class BOJ_G4_2698 {
             StringTokenizer st = new StringTokenizer(br.readLine());
             n = Integer.parseInt(st.nextToken());
             k = Integer.parseInt(st.nextToken());
+            dp = new int[n][2][k + 1];
 
-            sb.append(count()).append("\n");
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < 2; j++) {
+                    Arrays.fill(dp[i][j], -1);
+                }
+            }
+
+            sb.append(count(0, 0, 0)).append("\n");
         }
 
         System.out.println(sb.toString());
     }
 
-    private static int count() {
+    private static int count(int cur, int prev, int cnt) {
 
-        int[][][] dp = new int[n + 1][k + 1][2];
+        if (cnt > k) return 0;
 
-        dp[1][0][0] = 1; // 0
-        dp[1][0][1] = 1; // 1
-
-        for (int i = 2; i <= n; i++) {
-            for (int j = 0; j < i; j++) {
-                if (j > k) break;
-                dp[i][j][0] = dp[i - 1][j][0] + dp[i - 1][j][1];
-
-                dp[i][j][1] = dp[i - 1][j][0];
-                if (j != 0) dp[i][j][1] += dp[i - 1][j - 1][1];
-            }
+        if (cur == n) {
+            if (cnt == k) return 1;
+            return 0;
         }
 
-        return dp[n][k][0] + dp[n][k][1];
+        if (dp[cur][prev][cnt] != -1) return dp[cur][prev][cnt];
+
+        dp[cur][prev][cnt] = 0;
+        dp[cur][prev][cnt] += count(cur + 1, 0, cnt);
+        dp[cur][prev][cnt] += count(cur + 1, 1, cnt + prev);
+
+        return dp[cur][prev][cnt];
     }
 }
