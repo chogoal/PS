@@ -29,7 +29,8 @@ public class BOJ_G5_2467 {
                 ans2 = e;
             }
 
-            if (sum >= 0) e--;
+            if (sum == 0) break;
+            if (sum > 0) e--;
             else s++;
         }
 
