@@ -7,6 +7,7 @@ public class BOJ_G4_1987 {
 
     static int R, C;
     static char[][] map;
+    static boolean[] visited;
     static int[] dx = { -1, 1, 0, 0 };
     static int[] dy = { 0, 0, -1, 1 };
     static int max;
@@ -18,6 +19,7 @@ public class BOJ_G4_1987 {
         R = Integer.parseInt(st.nextToken());
         C = Integer.parseInt(st.nextToken());
         map = new char[R][C];
+        visited = new boolean['Z' - 'A' + 1];
 
         for (int i = 0; i < R; i++) {
             String line = br.readLine();
@@ -26,12 +28,12 @@ public class BOJ_G4_1987 {
             }
         }
 
-        dfs(0, 0, 1, new boolean['Z' - 'A' + 1]);
+        dfs(0, 0, 1);
 
         System.out.println(max);
     }
 
-    private static void dfs(int x, int y, int cnt, boolean[] visited) {
+    private static void dfs(int x, int y, int cnt) {
 
         visited[map[x][y] - 'A'] = true;
 
@@ -41,14 +43,10 @@ public class BOJ_G4_1987 {
             if (nx < 0 || nx >= R || ny < 0 || ny >= C) continue;
             if (visited[map[nx][ny] - 'A']) continue;
 
-            boolean[] visitedCopy = new boolean['Z' - 'A' + 1];
-            for (int i = 0; i < visited.length; i++) {
-                visitedCopy[i] = visited[i];
-            }
-
-            dfs(nx, ny, cnt + 1, visitedCopy);
+            dfs(nx, ny, cnt + 1);
         }
 
         max = Math.max(max, cnt);
+        visited[map[x][y] - 'A'] = false;
     }
 }
