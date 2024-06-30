@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
-public class BOJ_G4_25577 {
+public class BOJ_G4_2487 {
 
     static int N;
     static int[] order;
