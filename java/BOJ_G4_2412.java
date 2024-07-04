@@ -4,16 +4,8 @@ import java.util.*;
 public class BOJ_G4_2412 {
 
     static int n, T;
-    static List<Pos>[] graph;
-
-    static class Pos {
-        int y;
-        boolean visited;
-
-        public Pos(int y) {
-            this.y = y;
-        }
-    }
+    static Set<Integer>[] pos;
+    static Set<Integer>[] visited;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -21,14 +13,18 @@ public class BOJ_G4_2412 {
 
         n = Integer.parseInt(st.nextToken());
         T = Integer.parseInt(st.nextToken());
-        graph = new ArrayList[1000001];
-        for (int i = 0; i < graph.length; i++) graph[i] = new ArrayList<>();
+        pos = new HashSet[T + 1];
+        visited = new HashSet[T + 1];
+        for (int i = 0; i <= T; i++) {
+            pos[i] = new HashSet<>();
+            visited[i] = new HashSet<>();
+        }
 
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
             int x = Integer.parseInt(st.nextToken());
             int y = Integer.parseInt(st.nextToken());
-            graph[x].add(new Pos(y));
+            pos[y].add(x);
         }
 
         System.out.println(move());
@@ -39,8 +35,6 @@ public class BOJ_G4_2412 {
         Queue<int[]> queue = new ArrayDeque<>();
         queue.offer(new int[] { 0, 0, 0 });
 
-        int cnt = 0;
-
         while (!queue.isEmpty()) {
             int[] cur = queue.poll();
             int x = cur[0];
@@ -48,22 +42,24 @@ public class BOJ_G4_2412 {
             int depth = cur[2];
 
             if (y == T) {
-                cnt = depth;
-                break;
+                return depth;
             }
 
-            for (int i = x - 2; i <= x + 2; i++) {
-                if (i < 0 || i > 1000001) continue;
+            for (int i = 2; i >= -2; i--) {
+                int ny = y + i;
+                if (ny < 0 || ny > T) continue;
 
-                for (Pos p : graph[i]) {
-                    if (Math.abs(y - p.y) > 2 || p.visited) continue;
+                for (int j = 2; j >= -2; j--) {
+                    int nx = x + j;
 
-                    queue.offer(new int[] { i, p.y, depth + 1 });
-                    p.visited = true;
+                    if (pos[ny].contains(nx) && !visited[ny].contains(nx)) {
+                        queue.offer(new int[] { nx, ny, depth + 1 });
+                        visited[ny].add(nx);
+                    }
                 }
             }
         }
 
-        return cnt == 0 ? -1 : cnt;
+        return -1;
     }
 }
