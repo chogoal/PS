@@ -7,42 +7,48 @@ import java.util.StringTokenizer;
 
 public class BOJ_S1_1697 {
 
+    static int N, K;
+    static int[] visited;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        int N = Integer.parseInt(st.nextToken());
-        int K = Integer.parseInt(st.nextToken());
+        N = Integer.parseInt(st.nextToken());
+        K = Integer.parseInt(st.nextToken());
+        visited = new int[100001];
 
-        int[] visited = new int[100001];
+        System.out.println(bfs());
+    }
+
+    private static int bfs() {
+
+        Queue<Integer> queue = new ArrayDeque<>();
+        queue.offer(N);
         visited[N] = 1;
 
-        Queue<Integer> queue = new ArrayDeque<Integer>();
-        queue.offer(N);
-
-        int time = 0;
         while (!queue.isEmpty()) {
-            int cur = queue.poll();
+            int now = queue.poll();
 
-            if (cur == K) {
-                time = visited[cur] - 1;
-                break;
+            if (now == K) {
+                return visited[K] - 1;
             }
 
-            if (cur - 1 >= 0 && visited[cur - 1] == 0) {
-                visited[cur - 1] = visited[cur] + 1;
-                queue.offer(cur - 1);
+            if (now + 1 <= 100000 && visited[now + 1] == 0) {
+                queue.offer(now + 1);
+                visited[now + 1] = visited[now] + 1;
             }
-            if (cur + 1 <= 100000 && visited[cur + 1] == 0) {
-                visited[cur + 1] = visited[cur] + 1;
-                queue.offer(cur + 1);
+
+            if (now - 1 >= 0 && visited[now - 1] == 0) {
+                queue.offer(now - 1);
+                visited[now - 1] = visited[now] + 1;
             }
-            if (cur * 2 <= 100000 && visited[cur * 2] == 0) {
-                visited[cur * 2] = visited[cur] + 1;
-                queue.offer(cur * 2);
+            if (now * 2 <= 100000 && visited[now * 2] == 0) {
+                queue.offer(now * 2);
+                visited[now * 2] = visited[now] + 1;
             }
         }
 
-        System.out.println(time);
+        return -1;
     }
 }
