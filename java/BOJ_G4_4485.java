@@ -7,6 +7,7 @@ public class BOJ_G4_4485 {
 
     static int N;
     static int[][] map;
+    static int[][] visited;
     static int[] dx = { -1, 1, 0, 0 };
     static int[] dy = { 0, 0, -1, 1 };
 
@@ -35,10 +36,12 @@ public class BOJ_G4_4485 {
             if (N == 0) break;
 
             map = new int[N][N];
+            visited = new int[N][N];
             for (int i = 0; i < N; i++) {
                 StringTokenizer st = new StringTokenizer(br.readLine());
                 for (int j = 0; j < N; j++) {
                     map[i][j] = Integer.parseInt(st.nextToken());
+                    visited[i][j] = Integer.MAX_VALUE;
                 }
             }
 
@@ -50,28 +53,23 @@ public class BOJ_G4_4485 {
 
     private static int bfs() {
 
-        Queue<int[]> queue = new ArrayDeque<>();
-        queue.offer(new int[] { 0, 0 });
-
-        int[][] visited = new int[N][N];
-        for (int i = 0; i < N; i++) {
-            Arrays.fill(visited[i], Integer.MAX_VALUE);
-        }
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        pq.offer(new Node(0, 0, map[0][0]));
         visited[0][0] = map[0][0];
 
-        while (!queue.isEmpty()) {
-            int[] now = queue.poll();
-            int x = now[0];
-            int y = now[1];
+        while (!pq.isEmpty()) {
+            Node n = pq.poll();
+
+            if (n.k > visited[n.x][n.y]) continue;
 
             for (int d = 0; d < 4; d++) {
-                int nx = x + dx[d];
-                int ny = y + dy[d];
+                int nx = n.x + dx[d];
+                int ny = n.y + dy[d];
                 if (nx < 0 || nx >= N || ny < 0 || ny >= N) continue;
 
-                if (visited[nx][ny] > visited[x][y] + map[nx][ny]) {
-                    queue.offer(new int[] { nx, ny });
-                    visited[nx][ny] = visited[x][y] + map[nx][ny];
+                if (visited[nx][ny] > visited[n.x][n.y] + map[nx][ny]) {
+                    visited[nx][ny] = visited[n.x][n.y] + map[nx][ny];
+                    pq.offer(new Node(nx, ny, visited[nx][ny]));
                 }
             }
         }
