@@ -8,12 +8,17 @@ public class BOJ_B3_17945 {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
+        StringBuilder sb = new StringBuilder();
 
         int A = Integer.parseInt(st.nextToken());
         int B = Integer.parseInt(st.nextToken());
 
-        int root = (int)Math.sqrt(A * A - B);
-        if (root == 0) System.out.println(-A);
-        else System.out.println((-A - root) + " " + (-A + root));
+        for (int i = -1000; i <= 1000; i++) {
+            if (i * i + 2 * A * i + B == 0) {
+                sb.append(i).append(" ");
+            }
+        }
+
+        System.out.println(sb.toString());
     }
 }
