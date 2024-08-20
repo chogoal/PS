@@ -19,9 +19,15 @@ public class BOJ_B1_2309 {
         Arrays.sort(heights);
 
         int f1 = -1, f2 = -1;
+        int diff = sum - 100;
+
+        ex:
         for (int i = 0; i < 9; i++) {
             for (int j = i + 1; j < 9; j++) {
-                if (heights[i] + heights[j] == sum - 100) { f1 = i; f2 = j; break; }
+                if (heights[i] + heights[j] == diff) {
+                    f1 = i; f2 = j;
+                    break ex;
+                }
             }
         }
 
