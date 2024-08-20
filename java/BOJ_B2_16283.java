@@ -8,6 +8,7 @@ public class BOJ_B2_16283 {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
+        StringBuilder sb = new StringBuilder();
 
         int a = Integer.parseInt(st.nextToken());
         int b = Integer.parseInt(st.nextToken());
@@ -21,10 +22,14 @@ public class BOJ_B2_16283 {
             if (a * x + b * y != w) continue;
 
             if (sheep == 0) sheep = x;
-            else { System.out.println(-1); return; }
+            else {
+                System.out.println(-1);
+                return;
+            }
         }
 
-        if (sheep == 0) System.out.println(-1);
-        else System.out.println(sheep + " " + (n - sheep));
+        if (sheep == 0) sb.append(-1);
+        else sb.append(sheep).append(" ").append(n - sheep);
+        System.out.println(sb.toString());
     }
 }
